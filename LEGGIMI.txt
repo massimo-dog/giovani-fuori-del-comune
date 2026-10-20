@@ -1,0 +1,135 @@
+GIOVANI FUORI DAL COMUNE - Motore di ricerca
+Istruzioni per installazione e uso su Mac
+=============================================================================
+
+
+CONTENUTO DELLA CARTELLA
+-----------------------------------------------------------------------------
+  app.py                    il file da avviare (la pagina)
+  stile.css                 grafica della pagina (colori, font, misure)
+  comune.py                 caricamento dei dati e delle foto, paginazione
+  .streamlit/config.toml    tema di base dell'app
+  questionario.xlsx         dati e foto dei profili
+  LOGO_OK.png               logo originale
+  logo_trasparente.png      il logo con lo sfondo trasparente, usato nella pagina
+  INTERFACCIA.pdf           riferimento grafico fornito dal cliente
+  requirements.txt          elenco delle librerie necessarie
+  LEGGIMI.txt               questo file
+
+
+1. REQUISITI
+-----------------------------------------------------------------------------
+Serve Python 3.10 o successivo.
+
+Per controllare la versione, aprire il Terminale (Applicazioni > Utility >
+Terminale) e scrivere:
+
+    python3 --version
+
+Se la versione è inferiore a 3.10, scaricare e installare l'ultima versione
+da https://www.python.org/downloads/macos/
+
+
+2. INSTALLAZIONE (solo la prima volta)
+-----------------------------------------------------------------------------
+a) Aprire il Terminale.
+
+b) Entrare nella cartella dell'app: scrivere  cd  seguito da uno spazio,
+   trascinare la cartella dal Finder dentro la finestra del Terminale
+   e premere Invio.
+
+c) Installare o aggiornare le librerie:
+
+    python3 -m pip install --upgrade -r requirements.txt
+
+   Ci vuole qualche minuto. L'operazione è riuscita se alla fine compare
+   "Successfully installed ...".
+
+Questo passaggio va fatto anche se Streamlit era già installato: l'app
+è stata realizzata e provata con Streamlit 1.65, e il comando installa
+proprio quella serie (anche se sul computer ce n'è una più recente, che
+verrebbe sostituita). Con versioni diverse l'aspetto della pagina
+potrebbe cambiare.
+
+
+3. AVVIO
+-----------------------------------------------------------------------------
+Dal Terminale, dentro la cartella dell'app (vedi punto 2b):
+
+    streamlit run app.py
+
+Il browser si apre da solo all'indirizzo http://localhost:8501
+Se non si apre, aprire quell'indirizzo a mano.
+
+Al primo avvio Streamlit può chiedere un indirizzo email nel Terminale:
+non serve, lasciare vuoto e premere Invio.
+
+Per chiudere l'app: tornare nel Terminale e premere Ctrl+C.
+Chiudere solo la scheda del browser non basta: l'app resta attiva.
+
+
+4. USO
+-----------------------------------------------------------------------------
+La pagina è una sola, che si scorre dall'alto in basso:
+
+  - in alto, il testo di presentazione, il logo e due campi di ricerca:
+    "Paese estero" e "Città";
+  - scegliendo un paese e/o una città compaiono, più in basso, le istruzioni
+    per farsi contattare e le schede delle persone; la pagina scorre da sola
+    fino ai risultati;
+  - in fondo, il logo piccolo.
+
+Come funziona la ricerca:
+  - i due campi propongono solo i paesi e le città presenti nei dati; si può
+    anche digitare per cercare nell'elenco;
+  - le città proposte dipendono dal paese scelto;
+  - basta compilare uno solo dei campi; se si compilano entrambi, compaiono
+    le persone che corrispondono a tutti e due;
+  - per annullare una scelta usare la piccola "x" nel campo;
+  - quando i risultati sono molti (più di 10), le pagine si scorrono con i
+    numeri sotto le schede.
+
+Per ogni persona compaiono: foto, nome e cognome, città e nazione,
+motivazione della scelta (con "Leggi tutto" se è lunga). Email, telefono e
+gli altri dati presenti nell'Excel NON vengono mostrati.
+
+
+5. AGGIORNARE I DATI
+-----------------------------------------------------------------------------
+Sostituire questionario.xlsx con la nuova versione, con lo stesso nome e
+nella stessa cartella, poi ricaricare la pagina del browser.
+Non serve riavviare l'app.
+
+Perché i dati vengano letti correttamente:
+
+  - mantenere queste colonne con questi nomi:
+        Cognome e Nome, Nazione, Città, Motivazione, Foto
+  - scrivere il nome nella forma "Cognome Nome" (es. "Rossi Mario");
+  - scrivere ogni nazione e ogni città sempre allo stesso modo (es. sempre
+    "Inghilterra", non a volte "Regno Unito"): ogni grafia diversa
+    compare nei campi di ricerca come una voce a sé;
+  - le foto vanno appoggiate sopra la cella della colonna Foto, sulla
+    riga della persona, come nel file attuale. La funzione di Excel
+    "Posiziona nella cella" non è supportata: in quel caso, come per
+    chi non ha la foto, compare un riquadro con le iniziali.
+
+
+6. PROBLEMI FREQUENTI
+-----------------------------------------------------------------------------
+"command not found: streamlit"
+    Avviare l'app con:
+        python3 -m streamlit run app.py
+
+Nella pagina compare "Questa app richiede Streamlit 1.65 o successivo"
+    Ripetere il comando del punto 2c, poi riavviare l'app.
+
+Durante l'installazione compare un errore "CERTIFICATE_VERIFY_FAILED"
+    Aprire la cartella Applicazioni > Python 3.x, fare doppio clic su
+    "Install Certificates.command", poi ripetere il punto 2c.
+
+"Port 8501 is not available"
+    L'app è già aperta in un'altra finestra del Terminale: usare quella,
+    oppure chiuderla con Ctrl+C e ripetere l'avvio.
+
+Una persona compare con le iniziali al posto della foto
+    Vedere l'ultimo punto della sezione 5.

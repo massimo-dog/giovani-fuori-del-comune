@@ -1,0 +1,151 @@
+/* Giovani fuori dal Comune: stile della pagina, ricavato da INTERFACCIA.pdf (riferimento: 1170 px di larghezza).
+   I colori del PDF sono CMYK; qui sono convertiti in sRGB col profilo ICC "Generic CMYK" di macOS (quello di Preview).
+   Altri lettori PDF li convertono in modo diverso e li mostrano più saturi (ad es. Poppler: sfondo #e1ee70, testo #f14624):
+   per allinearsi a uno di quelli basta cambiare i valori qui sotto e backgroundColor in .streamlit/config.toml. */
+
+:root {
+  --sfondo: #e1e788;        /* C11.6 M0 Y58 K0 */
+  --arancio: #df5531;       /* M80 Y95 */
+  --grigio: #b3b6b5;        /* K30: testo delle pillole e voci del menu */
+  --grigio-scuro: #626464;  /* K70: voce selezionata */
+  --scheda-testo: #262730;
+  --scheda-secondario: #6b6d76;
+  --scheda-bordo: #cfcfd0;
+  /* DIN non è utilizzabile: font di sistema simili, il primo disponibile vince */
+  --din-grassetto: "DIN Alternate", "DIN", "Barlow", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --din-normale: "Avenir Next", "DIN", "Barlow", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* --- Pagina: sfondo pieno, niente elementi di Streamlit ------------------------- */
+html, body, [data-testid="stApp"], [data-testid="stAppViewContainer"], [data-testid="stMain"] {
+  background: var(--sfondo) !important;
+}
+[data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"],
+[data-testid="stStatusWidget"], footer { display: none !important; }
+
+[data-testid="stMainBlockContainer"] {
+  max-width: 1170px; padding: 0 33px 32px; margin: 0 auto;
+}
+[data-testid="stMainBlockContainer"] > [data-testid="stVerticalBlock"] { gap: 0; }
+[data-testid="stElementContainer"] { width: 100%; }
+
+/* --- Intestazione --------------------------------------------------------------- */
+.intestazione { text-align: center; color: var(--arancio); padding-top: 27px; }
+.introduzione, .contatto {
+  font: 400 22px/28.6px var(--din-normale); letter-spacing: .02em; margin: 0;
+}
+.logo { display: block; width: 505px; max-width: 100%; margin: 0 auto; }
+.titolo {
+  font: 700 24px/26px var(--din-grassetto); letter-spacing: .02em; text-transform: uppercase;
+  margin: 35px 0 0; padding: 0;
+}
+.sottotitolo {
+  font: 400 15px/19.7px var(--din-normale); letter-spacing: .02em; text-transform: uppercase;
+  margin: 0; padding: 0;
+}
+
+/* --- Pillole di ricerca ---------------------------------------------------------- */
+.st-key-paese, .st-key-citta { width: 478px !important; max-width: 100%; margin: 0 auto; }
+.st-key-paese { margin-top: 30px !important; margin-bottom: 40px !important; }
+
+.st-key-paese [role="group"], .st-key-citta [role="group"] {
+  height: 68px; border-radius: 34px; border: 0; background: #fff; box-shadow: none; padding: 0 12px 0 44px;
+}
+.st-key-paese [role="group"]:focus-within, .st-key-citta [role="group"]:focus-within { box-shadow: 0 0 0 3px rgba(223, 85, 49, .45); }
+.st-key-paese input, .st-key-citta input {
+  height: 100%; font: 700 24px/1 var(--din-grassetto); letter-spacing: .02em; text-transform: uppercase;
+  text-align: center; color: var(--grigio-scuro); caret-color: var(--arancio);
+}
+.st-key-paese input::placeholder, .st-key-citta input::placeholder { color: var(--grigio); opacity: 1; }
+.st-key-paese button, .st-key-citta button { color: var(--grigio); }
+/* Nel PDF le pillole non hanno la freccia: resta il pulsante (tastiera, schermi tattili) ma senza icona */
+.st-key-paese button[aria-label="Open"] svg, .st-key-citta button[aria-label="Open"] svg { display: none; }
+
+/* Menu a tendina: pannello bianco a spigoli vivi con ombra, voci in grassetto maiuscolo */
+[data-testid="stSelectboxVirtualDropdown"] {
+  background: #fff !important; border: 0 !important; border-radius: 0 !important; box-shadow: 3px 3px 6px rgba(0, 0, 0, .5) !important;
+}
+[data-testid="stSelectboxVirtualDropdown"] [role="option"] {
+  background: #fff !important; justify-content: center; text-align: center; height: auto; min-height: 0; padding: 4px 14px;
+  font: 700 17px/20.8px var(--din-grassetto); letter-spacing: .02em; text-transform: uppercase; color: var(--grigio);
+}
+[data-testid="stSelectboxVirtualDropdown"] [role="option"] * {
+  font: inherit; color: inherit; letter-spacing: inherit; width: 100%; text-align: center; justify-content: center;
+  background: transparent !important; border-radius: 0;
+}
+[data-testid="stSelectboxVirtualDropdown"] [role="option"]:hover,
+[data-testid="stSelectboxVirtualDropdown"] [role="option"][aria-selected="true"],
+[data-testid="stSelectboxVirtualDropdown"] [role="option"][data-focused],
+[data-testid="stSelectboxVirtualDropdown"] [role="option"][data-hovered],
+[data-testid="stSelectboxVirtualDropdown"] [role="option"][data-focus-visible] { color: var(--grigio-scuro); }
+
+/* --- Risultati ------------------------------------------------------------------- */
+.risultati { text-align: center; color: var(--arancio); padding-top: 69px; scroll-margin-top: 24px; }
+.pannello { background: #fff; width: 790px; max-width: 100%; margin: 60px auto 0; padding: 13px 14px 16px 13px; text-align: left; }
+.nessun-risultato { font: 400 22px/28.6px var(--din-normale); margin: 40px 0 0; }
+
+.scheda {
+  display: flex; align-items: flex-start; gap: 22px; padding: 21px; background: #fff;
+  border: 1px solid var(--scheda-bordo); border-radius: 16px; color: var(--scheda-testo);
+}
+.scheda + .scheda { margin-top: 14px; }
+.foto { width: 207px; height: 207px; flex: none; object-fit: cover; border-radius: 16px; }
+.corpo { min-width: 0; flex: 1; }
+.nome { font-size: 32px; line-height: 36px; font-weight: 700; margin: 12px 0 0; padding: 0; color: var(--scheda-testo); }
+.luogo { display: flex; align-items: center; gap: 6px; font-size: 22px; line-height: 28px; margin: 27px 0 0; }
+.pin { width: 22px; height: 22px; flex: none; background: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cpath d=%22M12 1.5a7.5 7.5 0 0 0-7.5 7.5c0 5.2 6 10.9 7 13.4.1.3.9.3 1 0 1-2.5 7-8.2 7-13.4A7.5 7.5 0 0 0 12 1.5z%22 fill=%22%23ec3440%22/%3E%3Ccircle cx=%2212%22 cy=%229%22 r=%222.7%22 fill=%22%23fff%22 fill-opacity=%22.85%22/%3E%3C/svg%3E") center / contain no-repeat; }
+.motivazione {
+  font-size: 22.3px; line-height: 34.5px; color: var(--scheda-secondario); margin: 50px 0 0;
+  padding: 0 0 0 17px; border-left: 3px solid #dfdfe0;
+}
+.motivazione.vuota { border: 0; padding: 0; font-style: italic; }
+.apri { position: absolute; opacity: 0; pointer-events: none; }
+.completa, .chiudi-testo { display: none; }
+.apri:checked ~ .anteprima, .apri:checked ~ .bottone .apri-testo { display: none; }
+.apri:checked ~ .completa { display: block; }
+.apri:checked ~ .bottone .chiudi-testo { display: inline; }
+.bottone {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 23px; height: 55px; padding: 0 18px;
+  font-size: 19.4px; border: 1px solid var(--scheda-bordo); border-radius: 14px; cursor: pointer; user-select: none;
+  color: var(--scheda-testo); background: #fff;
+}
+.bottone:hover { background: #f5f5f7; }
+.apri:focus-visible ~ .bottone { outline: 2px solid var(--arancio); outline-offset: 2px; }
+.bottone::after { content: ""; width: 12px; height: 12px; background: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22%3E%3Cpath d=%22M3.5 6l4.5 4.5L12.5 6%22 fill=%22none%22 stroke=%22%23262730%22 stroke-width=%221.6%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/svg%3E") center / contain no-repeat; transition: transform .15s; }
+.apri:checked ~ .bottone::after { transform: rotate(180deg); }
+
+/* Paginazione: compare solo con più di una pagina di risultati */
+[class*="st-key-pagina_"] button {
+  min-height: 46px; width: 100%; border-radius: 14px; font: 700 20px/1 var(--din-grassetto);
+  border: 1px solid var(--scheda-bordo); background: #fff; color: var(--scheda-testo);
+}
+[class*="st-key-pagina_"] button[kind="tertiary"] { background: transparent; border-color: transparent; color: var(--arancio); }
+[class*="st-key-pagina_"] button[kind="primary"] { background: var(--arancio); border-color: var(--arancio); color: #fff; }
+[class*="st-key-pagina_"] button:disabled { opacity: .45; }
+[class*="st-key-pagina_"] button * { font: inherit !important; color: inherit !important; }
+[class*="st-key-pagina_"] { margin-top: 20px; }
+
+/* --- Chiusura: logo piccolo in basso a destra ---------------------------------------- */
+.chiusura { text-align: right; padding-top: 26px; }
+.chiusura img { width: 300px; max-width: 45%; }
+
+/* --- Schermi stretti ---------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .a-capo { display: none; }
+  [data-testid="stMainBlockContainer"] { padding: 0 16px 24px; }
+  .introduzione, .contatto { font-size: 19px; line-height: 26px; }
+  .titolo { font-size: 20px; line-height: 24px; }
+  .risultati { padding-top: 48px; }
+  .pannello { margin-top: 36px; }
+}
+@media (max-width: 640px) {
+  .scheda { flex-direction: column; padding: 16px; gap: 14px; }
+  .foto { width: 100%; height: auto; aspect-ratio: 1; max-width: 260px; }
+  .nome { margin-top: 0; font-size: 24px; line-height: 30px; }
+  .luogo { margin-top: 10px; font-size: 18px; }
+  .motivazione { margin-top: 18px; font-size: 18px; line-height: 28px; }
+  .bottone { height: 48px; margin-top: 16px; font-size: 17px; }
+  .st-key-paese [data-baseweb="select"] > div, .st-key-citta [data-baseweb="select"] > div { height: 58px; border-radius: 29px; padding: 0 40px; }
+  .st-key-paese { margin-bottom: 24px !important; }
+  .chiusura img { width: 200px; }
+}
