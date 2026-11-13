@@ -1,0 +1,77 @@
+# Tiene sveglia l'app su Streamlit Community Cloud.
+# Ogni 4 ore apre l'app con un browser vero e, se la trova addormentata,
+# preme il pulsante di risveglio.
+#
+# UNICA COSA DA MODIFICARE: l'indirizzo dell'app alla riga APP_URL qui sotto.
+
+name: Tieni sveglia l'app
+
+on:
+  schedule:
+    - cron: "17 */4 * * *"   # ogni 4 ore, al minuto 17 (orario UTC)
+  workflow_dispatch:          # permette anche l'avvio a mano dalla scheda Actions
+
+env:
+  APP_URL: "https://giovani-fuori-del-comune.streamlit.app"
+
+jobs:
+  sveglia:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Installa il browser
+        run: |
+          npm install playwright
+          npx playwright install --with-deps chromium
+
+      - name: Apri l'app
+        run: |
+          cat > sveglia.js <<'EOF'
+          const { chromium } = require('playwright');
+
+          const URL = process.env.APP_URL;
+          const ATTESA_MASSIMA = 6 * 60 * 1000;   // tempo massimo per il risveglio
+
+          // L'app è pronta quando compare il contenitore principale di Streamlit
+          async function appPronta(page) {
+            for (const frame of page.frames()) {
+              try {
+                if (await frame.locator('[data-testid="stApp"]').count()) return true;
+              } catch (e) { /* frame in caricamento */ }
+            }
+            return false;
+          }
+
+          (async () => {
+            if (!URL || URL.includes('NOME-DELLA-TUA-APP')) {
+              console.error("Indirizzo dell'app non impostato: modificare APP_URL nel file.");
+              process.exit(1);
+            }
+            const browser = await chromium.launch();
+            const page = await browser.newPage();
+            console.log('Apro ' + URL);
+            await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 120000 });
+
+            const inizio = Date.now();
+            let risvegliata = false;
+            while (Date.now() - inizio < ATTESA_MASSIMA) {
+              if (await appPronta(page)) {
+                console.log(risvegliata ? 'App risvegliata e di nuovo attiva.' : 'App già attiva.');
+                await page.waitForTimeout(20000);   // resta collegato qualche secondo
+                await browser.close();
+                return;
+              }
+              const pulsante = page.getByRole('button', { name: /get this app back up/i });
+              if (!risvegliata && await pulsante.count()) {
+                console.log('App addormentata: premo il pulsante di risveglio.');
+                await pulsante.first().click();
+                risvegliata = true;
+              }
+              await page.waitForTimeout(5000);
+            }
+            console.error("L'app non è partita entro il tempo previsto.");
+            await browser.close();
+            process.exit(1);
+          })();
+          EOF
+          node sveglia.js
