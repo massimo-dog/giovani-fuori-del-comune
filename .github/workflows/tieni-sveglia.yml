@@ -12,7 +12,7 @@ on:
   workflow_dispatch:          # permette anche l'avvio a mano dalla scheda Actions
 
 env:
-  APP_URL: "https://giovani-fuori-del-comune.streamlit.app"
+  APP_URL: "https://giovani-fuori-del-comune-fxjeth7dufuas5wyxr4qj3.streamlit.app/"
 
 jobs:
   sveglia:
